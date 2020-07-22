@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from user import apis as user_api
 
 urlpatterns = [
-    url(r'^api/user/', include('user.urls')),
+    url(r'^api/user/vcode/fetch/$', user_api.fetch_vcode),
+    url(r'^api/user/vcode/submit/$', user_api.submit_vcode),
 ]
