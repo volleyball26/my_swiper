@@ -34,11 +34,11 @@ class User(models.Model):
             'location': self.location
         }
 
-    # @property
-    # def userprofile(self):
-    #     if not hasattr(self, '_user'):
-    #         self._userprofile = UserProfile.objects.get(uid=self.id)
-    #         return self._userprofile
+    @property
+    def userprofile(self):
+        if not hasattr(self, '_user'):
+            self._userprofile = UserProfile.objects.get(uid=self.id)
+            return self._userprofile
 
 
 class UserProfile(models.Model):
@@ -46,7 +46,7 @@ class UserProfile(models.Model):
         ('male', '男'),
         ('female', '女')
     )
-    uid = models.SmallIntegerField('关联User键')
+    uid = models.SmallIntegerField('关联User键', unique=True)
     dating_gender = models.CharField('匹配的性别', max_length=6, default='female')
     dating_location = models.CharField('目标城市', max_length=16, default='北京')
     max_distance = models.FloatField('最大查找范围', default='10')
@@ -57,4 +57,17 @@ class UserProfile(models.Model):
     only_matched = models.BooleanField('不让未匹配的人看我的相册', default=False)
     auto_play = models.BooleanField('自动播放视频', default=False)
 
+    def to_dict(self):
+        return {
+            'uid': self.uid,
+            'dating_gender': self.dating_gender,
+            'dating_location': self.dating_location,
+            'max_distance': self.max_distance,
+            'min_distance': self.min_distance,
+            'max_dating_age': self.max_dating_age,
+            'min_dating_age': self.min_dating_age,
+            'vibration': self.vibration,
+            'only_matched': self.only_matched,
+            'auto_play': self.auto_play,
+        }
 

@@ -27,6 +27,7 @@ def send_vcode(phonenum):
         return True
 
     vcode = gen_randcode()
+    print(vcode)
     if vcode:
         cache.set(key, vcode, 500)
         return True
