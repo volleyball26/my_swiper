@@ -34,24 +34,21 @@ class User(models.Model):
             'location': self.location
         }
 
-    @property
-    def userprofile(self):
-        if not hasattr(self, '_user'):
-            self._userprofile = UserProfile.objects.get(uid=self.id)
-            return self._userprofile
+@property
+def userprofile(self):
+    if not hasattr(self, '_user'):
+        self._userprofile = UserProfile.objects.get(id=self.id)
+        return self._userprofile
 
 
 class UserProfile(models.Model):
-    SEX_CHOICE = (
-        ('male', '男'),
-        ('female', '女')
-    )
-    uid = models.SmallIntegerField('关联User键', unique=True)
-    dating_gender = models.CharField('匹配的性别', max_length=6, default='female')
-    dating_location = models.CharField('目标城市', max_length=16, default='北京')
-    max_distance = models.FloatField('最大查找范围', default='10')
-    min_distance = models.FloatField('最小查找范围', default='1')
-    max_dating_age = models.SmallIntegerField('最大交友年龄', default='80')
+
+    # uid = models.SmallIntegerField('关联User键', unique=True)
+    dating_gender = models.CharField('匹配的性别', max_length=6, choices=User.SEX_CHOICE, default='female')
+    dating_location = models.CharField('目标城市', max_length=16, choices=User.LOCATIONS, default='北京')
+    max_distance = models.FloatField('最大查找范围', default='10.0')
+    min_distance = models.FloatField('最小查找范围', default='5.0')
+    max_dating_age = models.SmallIntegerField('最大交友年龄', default='25')
     min_dating_age = models.SmallIntegerField('最小交友年龄', default='20')
     vibration = models.BooleanField('开启震动', default=False)
     only_matched = models.BooleanField('不让未匹配的人看我的相册', default=False)
@@ -59,7 +56,7 @@ class UserProfile(models.Model):
 
     def to_dict(self):
         return {
-            'uid': self.uid,
+            'id': self.id,
             'dating_gender': self.dating_gender,
             'dating_location': self.dating_location,
             'max_distance': self.max_distance,
@@ -70,4 +67,3 @@ class UserProfile(models.Model):
             'only_matched': self.only_matched,
             'auto_play': self.auto_play,
         }
-
